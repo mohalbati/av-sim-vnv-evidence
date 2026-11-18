@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+# per-vehicle inputs come from av-sim-credibility and are not redistributed
+womd_agents*.csv
