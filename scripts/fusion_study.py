@@ -17,6 +17,13 @@ from simfusion import fusion
 RES = ROOT / "results"; RES.mkdir(exist_ok=True)
 ap = argparse.ArgumentParser(); ap.add_argument("--agents-dir", default=str(ROOT.parent / "av-sim-credibility" / "results"))
 AGENTS = pathlib.Path(ap.parse_args().agents_dir).expanduser()
+SETTINGS_NEEDED = ["idm_cautious", "idm", "constant_speed"]
+_missing = [f"womd_agents_{s}.csv" for s in SETTINGS_NEEDED if not (AGENTS / f"womd_agents_{s}.csv").exists()]
+if _missing:
+    sys.exit(f"Per-vehicle inputs not found in {AGENTS}: {', '.join(_missing)}.\n"
+             "They are derived from the Waymo Open Motion Dataset and are not redistributed. Create them with\n"
+             "av-sim-credibility/scripts/womd_pilot.py (needs Waymax and dataset access), then pass --agents-dir.\n"
+             "The aggregate results in results/ already rebuild every table and figure: python scripts/make_figures.py")
 SETTINGS = ["idm_cautious", "idm", "constant_speed"]
 FAMS = ["car_following", "lane_change", "intersection", "vru_interaction"]
 TAU = 1.5
